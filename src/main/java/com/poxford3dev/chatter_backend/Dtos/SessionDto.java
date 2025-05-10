@@ -4,11 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class UserDto {
-    private Integer id;
+public class SessionDto {
+    private String id;
     private String name;
-    private String profilePic;
+    private Integer duration;
+    private Date date;
+    private boolean active;
+    private String type;
 }

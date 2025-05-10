@@ -22,8 +22,8 @@ public class UserService {
         return userRepo.findById(id).orElse(null);
     }
 
-    public User createUser(User newUser) {
-        return userRepo.save(newUser);
+    public void createUser(User newUser) {
+        userRepo.save(newUser);
     }
 
     public boolean deleteUser(Integer id) {

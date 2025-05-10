@@ -16,13 +16,13 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-    private UserMapper userMapper;
 
     @GetMapping
     public List<UserDto> getUsers() {
         return userService.getAllUsers()
                 .stream()
-                .map(userMapper::toDto)
+//                .map(userMapper::toDto)
+                .map(UserMapper::toDto)
                 .toList();
     }
 
@@ -33,13 +33,13 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(userMapper.toDto(user));
+        return ResponseEntity.ok(UserMapper.toDto(user));
     }
 
     @PostMapping
     public UserDto createUser(@RequestBody User newUser) {
         userService.createUser(newUser);
-        return userMapper.toDto(newUser);
+        return UserMapper.toDto(newUser);
     }
 
     @DeleteMapping("/{id}")

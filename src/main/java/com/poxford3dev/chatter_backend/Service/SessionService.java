@@ -2,11 +2,12 @@ package com.poxford3dev.chatter_backend.Service;
 
 import com.poxford3dev.chatter_backend.Entity.Session;
 import com.poxford3dev.chatter_backend.Repository.SessionRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-// TODO
+
 @Service
 public class SessionService {
 
@@ -17,11 +18,29 @@ public class SessionService {
         return sessionRepo.findAll();
     }
 
-    public Session createSession(Session newSesh) {
-        return sessionRepo.save(newSesh);
+    public Session getSessionById(String id) {
+        return sessionRepo.findById(id).orElse(null);
     }
 
-//    public boolean deleteSession(String id) {
-//        if ()
-//    }
+    public void createSession(Session newSesh) {
+        sessionRepo.save(newSesh);
+    }
+
+    public void editSession(Session editedSession, String id) {
+        if (sessionRepo.existsById(id)) {
+            // save and flush makes sure the changes go through
+            sessionRepo.saveAndFlush(editedSession);
+        } else {
+            throw new EntityNotFoundException("Session with id (" + id + ") not found");
+        }
+    }
+
+    public boolean deleteSession(String id) {
+        if (sessionRepo.existsById(id)) {
+            sessionRepo.deleteById(id);
+            return true;
+        } else {
+            throw new EntityNotFoundException("Session with id (" + id + ") not found");
+        }
+    }
 }

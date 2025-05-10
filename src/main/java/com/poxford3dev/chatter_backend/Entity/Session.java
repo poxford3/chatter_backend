@@ -23,6 +23,6 @@ public class Session {
     private Integer duration; // milliseconds
     private Date date;
     private boolean active;
-    private Object type;
+    private String type;
 
 }
