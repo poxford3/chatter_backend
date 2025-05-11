@@ -1,6 +1,7 @@
 package com.poxford3dev.chatter_backend.Service;
 
 import com.poxford3dev.chatter_backend.Entity.Session;
+import com.poxford3dev.chatter_backend.Mappers.SessionMapper;
 import com.poxford3dev.chatter_backend.Repository.SessionRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,9 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
-public class UserDto {
+public class  UserDto {
     private Integer id;
     private String name;
     private String profilePic;

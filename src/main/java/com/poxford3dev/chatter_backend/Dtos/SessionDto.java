@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.sql.Date;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 public class SessionDto {
     private String id;

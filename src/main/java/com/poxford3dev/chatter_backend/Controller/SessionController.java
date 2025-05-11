@@ -16,12 +16,14 @@ public class SessionController {
 
     @Autowired
     private SessionService sessionService;
+    @Autowired
+    private SessionMapper sessionMapper;
 
     @GetMapping
     public List<SessionDto> getSessions() {
         return sessionService.getAllSessions()
                 .stream()
-                .map(SessionMapper::toDto)
+                .map(sessionMapper::toDto)
                 .toList();
     }
 
@@ -31,20 +33,20 @@ public class SessionController {
         if (sesh == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(SessionMapper.toDto(sesh));
+        return ResponseEntity.ok(sessionMapper.toDto(sesh));
     }
 
     @PostMapping("/{id}")
     public SessionDto editSession(@RequestBody Session editedSession, @PathVariable String id) {
         // https://www.baeldung.com/spring-request-param
         sessionService.editSession(editedSession, id);
-        return SessionMapper.toDto(editedSession);
+        return sessionMapper.toDto(editedSession);
     }
 
 
     @PostMapping
     public SessionDto createSession(@RequestBody Session newSesh) {
         sessionService.createSession(newSesh);
-        return SessionMapper.toDto(newSesh);
+        return sessionMapper.toDto(newSesh);
     }
 }
