@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -16,4 +17,6 @@ public class SessionDto {
     private Timestamp created;
     private boolean active;
     private String type;
+    List<UserDto> users;
+
 }

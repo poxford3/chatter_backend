@@ -29,7 +29,7 @@ public class SessionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SessionDto> getUserById(@PathVariable("id") String id) {
+    public ResponseEntity<SessionDto> getSessionById(@PathVariable("id") String id) {
         var sesh = sessionService.getSessionById(id);
         if (sesh == null) {
             return ResponseEntity.notFound().build();
