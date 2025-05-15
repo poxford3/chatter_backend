@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Entity
 @Data
 @Table(name = "users")
@@ -19,6 +21,7 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private Timestamp created;
 
     @Column(name = "profile_pic")
     private String profilePic;

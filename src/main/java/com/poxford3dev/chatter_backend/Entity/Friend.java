@@ -20,10 +20,4 @@ public class Friend {
     @Id
     @Column(name = "friend_two")
     private Integer friendTwo;
-
-//    public Friend(Integer friendOne, Integer friendTwo) {
-//        this.friendOne = friendOne;
-//        this.friendTwo = friendTwo;
-//    }
-
 }

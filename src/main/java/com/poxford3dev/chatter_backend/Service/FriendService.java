@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FriendService {
@@ -37,14 +38,28 @@ public class FriendService {
         return friendRepo.findByFriendOneAndFriendTwo(id1, id2);
     }
 
-    public boolean addFriend(Integer userOneId, Integer userTwoId) {
-        List<Integer> friendsOrdered = orderedFriendId(userOneId, userTwoId);
-        if (isAlreadyFriends(userOneId, userTwoId)) {
-            throw new EntityNotFoundException("Error: already friends");
-        } else {
-            Friend newFriend = new Friend(friendsOrdered.get(0), friendsOrdered.get(1));
-            friendRepo.save(newFriend);
-            return true;
-        }
+    public Friend saveFriendship(Integer friendOne, Integer friendTwo) {
+        List<Integer> ordered = orderedFriendId(friendOne, friendTwo);
+        Friend friend = new Friend(ordered.get(0), ordered.get(1));
+        return friendRepo.save(friend);
+    }
+
+    // Retrieve all Friend relationships
+    public List<Friend> getAllFriendships() {
+        return friendRepo.findAll();
+    }
+
+    // Retrieve a specific Friend relationship
+    public Optional<Friend> getFriendship(Integer friendOne, Integer friendTwo) {
+        List<Integer> ordered = orderedFriendId(friendOne, friendTwo);
+        FriendId id = new FriendId(ordered.get(0), ordered.get(1));
+        return friendRepo.findById(id);
+    }
+    
+    // Delete a Friend relationship
+    public void deleteFriendship(Integer friendOne, Integer friendTwo) {
+        List<Integer> ordered = orderedFriendId(friendOne, friendTwo);
+        FriendId id = new FriendId(ordered.get(0), ordered.get(1));
+        friendRepo.deleteById(id);
     }
 }

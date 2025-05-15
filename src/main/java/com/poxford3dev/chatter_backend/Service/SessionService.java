@@ -1,7 +1,6 @@
 package com.poxford3dev.chatter_backend.Service;
 
 import com.poxford3dev.chatter_backend.Entity.Session;
-import com.poxford3dev.chatter_backend.Mappers.SessionMapper;
 import com.poxford3dev.chatter_backend.Repository.SessionRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +29,13 @@ public class SessionService {
     public void editSession(Session editedSession, String id) {
         if (sessionRepo.existsById(id)) {
             // save and flush makes sure the changes go through
-            sessionRepo.saveAndFlush(editedSession);
+            sessionRepo.save(editedSession);
         } else {
             throw new EntityNotFoundException("Session with id (" + id + ") not found");
         }
     }
 
+    // TODO implement
     public boolean deleteSession(String id) {
         if (sessionRepo.existsById(id)) {
             sessionRepo.deleteById(id);

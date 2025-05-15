@@ -1,5 +1,6 @@
 package com.poxford3dev.chatter_backend.Entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -7,23 +8,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-
 @Entity
 @Data
-@Table(name = "sessions")
+@Table(name = "session_users")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Session {
+public class SessionUser {
+    @Id
+    @Column(name = "session_id")
+    private String sessionId;
 
     @Id
-    private String id;
-
-    private String name;
-    private Integer duration; // milliseconds
-    private Timestamp created;
-    private boolean active;
-    private String type;
-
+    @Column(name = "user_id")
+    private Integer userId;
 }
