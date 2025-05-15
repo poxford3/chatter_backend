@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Data
@@ -25,4 +26,7 @@ public class User {
 
     @Column(name = "profile_pic")
     private String profilePic;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<SessionUser> sessionUsers;
 }

@@ -1,6 +1,7 @@
 package com.poxford3dev.chatter_backend.Controller;
 
 import com.poxford3dev.chatter_backend.Dtos.SessionDto;
+import com.poxford3dev.chatter_backend.Dtos.SessionRequest;
 import com.poxford3dev.chatter_backend.Entity.Session;
 import com.poxford3dev.chatter_backend.Mappers.SessionMapper;
 import com.poxford3dev.chatter_backend.Service.SessionService;
@@ -36,17 +37,17 @@ public class SessionController {
         return ResponseEntity.ok(sessionMapper.toDto(sesh));
     }
 
-    @PostMapping("/{id}")
-    public SessionDto editSession(@RequestBody Session editedSession, @PathVariable String id) {
+    @PutMapping("/{id}")
+    public ResponseEntity<SessionDto> editSession(@RequestBody SessionRequest editedSession, @PathVariable String id) {
         // https://www.baeldung.com/spring-request-param
-        sessionService.editSession(editedSession, id);
-        return sessionMapper.toDto(editedSession);
+        Session editSesh = sessionService.editSession(editedSession, id);
+        return ResponseEntity.ok(sessionMapper.toDto(editSesh));
     }
 
 
     @PostMapping
-    public SessionDto createSession(@RequestBody Session newSesh) {
-        sessionService.createSession(newSesh);
-        return sessionMapper.toDto(newSesh);
+    public ResponseEntity<SessionDto> createSession(@RequestBody SessionRequest newSesh) {
+        Session session = sessionService.createSession(newSesh);
+        return ResponseEntity.ok(sessionMapper.toDto(session));
     }
 }

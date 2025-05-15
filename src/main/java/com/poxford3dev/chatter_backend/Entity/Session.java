@@ -1,14 +1,12 @@
 package com.poxford3dev.chatter_backend.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,8 +20,14 @@ public class Session {
 
     private String name;
     private Integer duration; // milliseconds
+
+    @Column(insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp created;
+
     private boolean active;
     private String type;
+
+    @OneToMany(mappedBy = "session")
+    private List<SessionUser> sessionUsers;
 
 }
