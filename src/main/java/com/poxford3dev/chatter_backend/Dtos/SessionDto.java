@@ -1,10 +1,8 @@
 package com.poxford3dev.chatter_backend.Dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -18,5 +16,6 @@ public class SessionDto {
     private boolean active;
     private String type;
     List<UserDto> users;
+    List<ExerciseDto> exercises;
 
 }

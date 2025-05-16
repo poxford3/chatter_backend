@@ -27,6 +27,6 @@ public class User {
     @Column(name = "profile_pic")
     private String profilePic;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<SessionUser> sessionUsers;
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<SessionUser> sessionUsers;
 }

@@ -1,9 +1,11 @@
 package com.poxford3dev.chatter_backend.Service;
 
 import com.poxford3dev.chatter_backend.Dtos.SessionRequest;
+import com.poxford3dev.chatter_backend.Entity.Exercise;
 import com.poxford3dev.chatter_backend.Entity.Session;
 import com.poxford3dev.chatter_backend.Entity.SessionUser;
 import com.poxford3dev.chatter_backend.Entity.User;
+import com.poxford3dev.chatter_backend.Repository.ExerciseRepo;
 import com.poxford3dev.chatter_backend.Repository.SessionRepo;
 import com.poxford3dev.chatter_backend.Repository.SessionUserRepo;
 import com.poxford3dev.chatter_backend.Repository.UserRepo;
@@ -23,6 +25,9 @@ public class SessionService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private ExerciseRepo exerciseRepo;
 
     @Autowired
     private SessionUserRepo sessionUserRepo;
@@ -61,12 +66,14 @@ public class SessionService {
             sessionUserRepo.save(su);
         }
 
-        // TODO implement exercise
-//        if (request.getExerciseIds() != null) {
-//            List<Exercise> exercises = exerciseRepository.findAllById(request.getExerciseIds());
-//            session.setExercises(exercises); // assuming a @ManyToMany or @OneToMany relationship
-//            sessionRepository.save(session);
-//        }
+        if (sessionRequest.getExercises() != null && !sessionRequest.getExercises().isEmpty()) {
+            List<Exercise> exercises = sessionRequest.getExercises();
+            for (Exercise exercise : exercises) {
+                exercise.setSession(session);
+                exerciseRepo.save(exercise);
+            }
+        }
+
 
         return session;
     }
