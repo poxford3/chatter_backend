@@ -29,8 +29,10 @@ public interface SessionMapper {
                 .map(user -> new UserDto(
                         user.getId(),
                         user.getName(),
+                        user.getUsername(),
                         user.getProfilePic(),
-                        user.getCreated()
+                        user.getCreated(),
+                        user.getRoles()
                 ))
                 .collect(Collectors.toList());
     }
