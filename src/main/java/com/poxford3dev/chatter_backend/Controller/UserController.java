@@ -1,8 +1,12 @@
 package com.poxford3dev.chatter_backend.Controller;
 
+import com.poxford3dev.chatter_backend.Dtos.SessionDto;
+import com.poxford3dev.chatter_backend.Dtos.SessionRequest;
 import com.poxford3dev.chatter_backend.Dtos.UserDto;
+import com.poxford3dev.chatter_backend.Entity.Session;
 import com.poxford3dev.chatter_backend.Entity.User;
 import com.poxford3dev.chatter_backend.Mappers.UserMapper;
+import com.poxford3dev.chatter_backend.Payload.Request.EditedUserRequest;
 import com.poxford3dev.chatter_backend.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -37,19 +41,26 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toDto(user));
     }
 
-    @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody User newUser) {
-        try {
-            userService.createUser(newUser);
-            UserDto userDto = userMapper.toDto(newUser);
-            return ResponseEntity.status(201).body(userDto); // 201 Created
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(409).body("User already exists or violates constraints.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).body("Invalid user data.");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Unexpected error occurred.");
-        }
+    // not needed anymore, auth controller handles user creation
+//    @PostMapping
+//    public ResponseEntity<?> createUser(@RequestBody User newUser) {
+//        try {
+//            userService.createUser(newUser);
+//            UserDto userDto = userMapper.toDto(newUser);
+//            return ResponseEntity.status(201).body(userDto); // 201 Created
+//        } catch (DataIntegrityViolationException e) {
+//            return ResponseEntity.status(409).body("User already exists or violates constraints.");
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.status(400).body("Invalid user data.");
+//        } catch (Exception e) {
+//            return ResponseEntity.status(500).body("Unexpected error occurred.");
+//        }
+//    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDto> editUser(@RequestBody EditedUserRequest editedUserRequest, @PathVariable Integer id) {
+        User editedUser = userService.editUser(id, editedUserRequest);
+        return ResponseEntity.ok(userMapper.toDto(editedUser));
     }
 
     @DeleteMapping("/{id}")

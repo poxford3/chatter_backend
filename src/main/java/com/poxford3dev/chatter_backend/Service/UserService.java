@@ -1,19 +1,33 @@
 package com.poxford3dev.chatter_backend.Service;
 
+import com.poxford3dev.chatter_backend.Entity.ERole;
+import com.poxford3dev.chatter_backend.Entity.Role;
 import com.poxford3dev.chatter_backend.Entity.User;
+import com.poxford3dev.chatter_backend.Payload.Request.EditedUserRequest;
+import com.poxford3dev.chatter_backend.Repository.RoleRepo;
 import com.poxford3dev.chatter_backend.Repository.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private StringToERole stringToERole;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     public List<User> getAllUsers() {
         return userRepo.findAll();
@@ -23,37 +37,34 @@ public class UserService {
         return userRepo.findById(id).orElse(null);
     }
 
-    public void createUser(User newUser) {
-        if (newUser.getName() == null || newUser.getName().isBlank()) {
-            throw new IllegalArgumentException("Name is required.");
+    // TODO delete this function, covered by auth controller
+//    public void createUser(User newUser) {
+//        if (newUser.getName() == null || newUser.getName().isBlank()) {
+//            throw new IllegalArgumentException("Name is required.");
+//        }
+//        userRepo.save(newUser); // Let Spring throw if DB fails
+//    }
+
+    public User editUser(Integer id, EditedUserRequest editedUser) {
+        User currentUser = userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User with id (" + id + ") not found"));
+
+        currentUser.setUsername(editedUser.getUsername());
+        currentUser.setName(editedUser.getName());
+        currentUser.setEmail(editedUser.getEmail());
+        currentUser.setProfilePic(editedUser.getProfilePic());
+
+        if (currentUser.getPassword() != null) {
+            currentUser.setPassword(encoder.encode(editedUser.getPassword()));
         }
-        userRepo.save(newUser); // Let Spring throw if DB fails
-    }
 
-    /*
-        public User updateUser(Long id, User updatedUser) {
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        Set<Role> roles = stringToERole.stringToERole(editedUser.getRole());
+        currentUser.setRoles(roles);
 
-        existingUser.setUsername(updatedUser.getUsername());
-        existingUser.setEmail(updatedUser.getEmail());
-        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
-            existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-        }
-         // Update other fields as needed
-        return userRepository.save(existingUser);
-    }
-     */
 
-    // TODO finish implementing
-    public User updateUser(Integer id, User updatedUser) {
-        User existingUser = userRepo.findById(id)
-                .orElseThrow(() -> new InvalidConfigurationPropertyValueException("id", id, "unable to find user"));
-        existingUser.setName(updatedUser.getName());
-        existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setProfilePic(updatedUser.getProfilePic());
+        currentUser = userRepo.save(currentUser);
 
-        return updatedUser;
+        return currentUser;
     }
 
     public boolean deleteUser(Integer id) {

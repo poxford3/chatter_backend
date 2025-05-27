@@ -15,6 +15,7 @@ import com.poxford3dev.chatter_backend.Payload.Response.MessageResponse;
 import com.poxford3dev.chatter_backend.Repository.RoleRepo;
 import com.poxford3dev.chatter_backend.Repository.UserRepo;
 import com.poxford3dev.chatter_backend.Security.Jwt.JwtUtils;
+import com.poxford3dev.chatter_backend.Service.StringToERole;
 import com.poxford3dev.chatter_backend.Service.UserDetailsImpl;
 import jakarta.validation.Valid;
 
@@ -44,10 +45,10 @@ public class AuthController {
     UserRepo userRepository;
 
     @Autowired
-    RoleRepo roleRepository;
+    PasswordEncoder encoder;
 
     @Autowired
-    PasswordEncoder encoder;
+    StringToERole stringToERole;
 
     @Autowired
     JwtUtils jwtUtils;
@@ -78,13 +79,13 @@ public class AuthController {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+                    .body(new MessageResponse("Error: Username is already taken!", null));
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+                    .body(new MessageResponse("Error: Email is already in use!", null));
         }
 
         // Create new user's account
@@ -95,30 +96,11 @@ public class AuthController {
                 .password(encoder.encode(signUpRequest.getPassword()))
                 .build();
 
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                if (role.equals("admin")) {
-                    Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                            .orElseThrow(() -> new RuntimeException("Error: Role (admin) is not found."));
-                    roles.add(adminRole);
-                } else {
-                    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                            .orElseThrow(() -> new RuntimeException("Error: Role (user) is not found."));
-                    roles.add(userRole);
-                }
-            });
-        }
+        Set<Role> roles = stringToERole.stringToERole(signUpRequest.getRole());
 
         user.setRoles(roles);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!", user.getId()));
     }
 }

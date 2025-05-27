@@ -17,6 +17,7 @@ import java.util.List;
 public class Session {
 
     @Id
+    @Column(length = 36)
     private String id;
 
     private String name;
