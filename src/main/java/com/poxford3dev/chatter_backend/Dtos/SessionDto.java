@@ -17,5 +17,4 @@ public class SessionDto {
     private String type;
     List<UserDto> users;
     List<ExerciseDto> exercises;
-
 }

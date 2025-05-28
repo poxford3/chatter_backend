@@ -31,6 +31,7 @@ public interface SessionMapper {
                         user.getName(),
                         user.getUsername(),
                         user.getProfilePic(),
+                        user.getEmail(),
                         user.getCreated(),
                         user.getRoles()
                 ))

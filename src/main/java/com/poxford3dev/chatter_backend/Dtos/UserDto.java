@@ -14,6 +14,7 @@ public class  UserDto {
     private String name;
     private String username;
     private String profilePic;
+    private String email;
     private Timestamp created;
     private Set<Role> roles;
 }

@@ -20,11 +20,19 @@ public class SessionController {
     @Autowired
     private SessionMapper sessionMapper;
 
+    /**
+     *
+     * @param user_id Integer: id of the user to filter sessions on (optional)
+     * @return a filtered list of sessions given a user id
+     */
     @GetMapping
-    public List<SessionDto> getSessions() {
+    public List<SessionDto> getSessions(@RequestParam(required = false) Integer user_id) {
         return sessionService.getAllSessions()
                 .stream()
                 .map(sessionMapper::toDto)
+                .filter(sessionDto -> user_id == null || sessionDto.getUsers()
+                        .stream()
+                        .anyMatch(userDto -> userDto.getId().equals(user_id)))
                 .toList();
     }
 

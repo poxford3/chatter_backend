@@ -1,21 +1,15 @@
 package com.poxford3dev.chatter_backend.Service;
 
-import com.poxford3dev.chatter_backend.Entity.ERole;
 import com.poxford3dev.chatter_backend.Entity.Role;
 import com.poxford3dev.chatter_backend.Entity.User;
 import com.poxford3dev.chatter_backend.Payload.Request.EditedUserRequest;
-import com.poxford3dev.chatter_backend.Repository.RoleRepo;
 import com.poxford3dev.chatter_backend.Repository.UserRepo;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -54,7 +48,7 @@ public class UserService {
         currentUser.setEmail(editedUser.getEmail());
         currentUser.setProfilePic(editedUser.getProfilePic());
 
-        if (currentUser.getPassword() != null) {
+        if (editedUser.getPassword() != null) {
             currentUser.setPassword(encoder.encode(editedUser.getPassword()));
         }
 
