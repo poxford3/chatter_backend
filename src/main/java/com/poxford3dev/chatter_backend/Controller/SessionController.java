@@ -58,4 +58,13 @@ public class SessionController {
         Session session = sessionService.createSession(newSesh);
         return ResponseEntity.ok(sessionMapper.toDto(session));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteSession(@PathVariable String id) {
+        if (sessionService.deleteSession(id))  {
+            return ResponseEntity.ok("Session deleted");
+        } else {
+            return ResponseEntity.status(400).body("Not Found");
+        }
+    }
 }

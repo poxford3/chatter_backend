@@ -41,22 +41,6 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toDto(user));
     }
 
-    // not needed anymore, auth controller handles user creation
-//    @PostMapping
-//    public ResponseEntity<?> createUser(@RequestBody User newUser) {
-//        try {
-//            userService.createUser(newUser);
-//            UserDto userDto = userMapper.toDto(newUser);
-//            return ResponseEntity.status(201).body(userDto); // 201 Created
-//        } catch (DataIntegrityViolationException e) {
-//            return ResponseEntity.status(409).body("User already exists or violates constraints.");
-//        } catch (IllegalArgumentException e) {
-//            return ResponseEntity.status(400).body("Invalid user data.");
-//        } catch (Exception e) {
-//            return ResponseEntity.status(500).body("Unexpected error occurred.");
-//        }
-//    }
-
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> editUser(@RequestBody EditedUserRequest editedUserRequest, @PathVariable Integer id) {
         User editedUser = userService.editUser(id, editedUserRequest);
