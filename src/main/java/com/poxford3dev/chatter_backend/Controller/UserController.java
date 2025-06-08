@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -33,17 +35,24 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Integer id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Integer id) throws IOException {
         var user = userService.findUserById(id);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(userMapper.toDto(user));
+//        return ResponseEntity.ok(userMapper.toDto(user));
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> editUser(@RequestBody EditedUserRequest editedUserRequest, @PathVariable Integer id) {
+    public ResponseEntity<UserDto> editUser(@PathVariable Integer id, @RequestBody EditedUserRequest editedUserRequest) {
         User editedUser = userService.editUser(id, editedUserRequest);
+        return ResponseEntity.ok(userMapper.toDto(editedUser));
+    }
+
+    @PutMapping("/{id}/profile_pic")
+    public ResponseEntity<UserDto> editProfilePic(@PathVariable Integer id, @RequestBody MultipartFile profilePic) {
+        User editedUser = userService.editProfilePic(id, profilePic);
         return ResponseEntity.ok(userMapper.toDto(editedUser));
     }
 

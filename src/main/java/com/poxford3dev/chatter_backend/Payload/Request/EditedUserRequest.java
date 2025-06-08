@@ -14,6 +14,5 @@ public class EditedUserRequest {
     private String name;
     private String email;
     private String password;
-    private String profilePic;
     private Set<String> role; // Role names like "ROLE_USER", "ROLE_ADMIN"
 }
